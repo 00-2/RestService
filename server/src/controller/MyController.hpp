@@ -56,9 +56,9 @@ public:
   ENDPOINT("POST", "users", createUser,
            BODY_DTO(Object<UserDto>, userDto))
   {
-    this->users.add(userDto);
-    userDto->id = this->users.getUID();
+    userDto->id = this->users.updateUID();
     userDto->counter = 0;
+    this->users.add(userDto);
     return createDtoResponse(Status::CODE_200, userDto);
   }
   
@@ -74,7 +74,7 @@ public:
   }
   ENDPOINT("GET", "users/{uID}",getUser, PATH(Int32, uID))
   {
-    int index = uID-1;
+    int index = uID;
     auto showLoginDto = ShowLoginDto::createShared();
     showLoginDto->login = users.getUserDto(index)->login;
     return createDtoResponse(Status::CODE_200, showLoginDto);
@@ -89,10 +89,10 @@ public:
     info->addConsumes<Object<UserDto>>("application/json");
     info->addResponse<Object<UserDto>>(Status::CODE_200, "application/json");
   }
-  ENDPOINT("GET", "users/{uID}",delUser, PATH(Int32, uID))
+  ENDPOINT("DELETE", "users/{uID}",delUser, PATH(Int32, uID))
   {
     int index = uID;
-
+    users.remove(uID);
     return createResponse(Status::CODE_200, "Deleted");
   }
 

@@ -74,11 +74,28 @@ public:
   }
   ENDPOINT("GET", "users/{uID}",getUser, PATH(Int32, uID))
   {
-    int index = uID;
+    int index = uID-1;
     auto showLoginDto = ShowLoginDto::createShared();
-    showLoginDto->login = users.getUserDto(index-1)->login;
+    showLoginDto->login = users.getUserDto(index)->login;
     return createDtoResponse(Status::CODE_200, showLoginDto);
   }
+
+  /*Delete 
+      DELETE
+      http://localhost:8000/users/{UID}
+  */
+    ENDPOINT_INFO(delUser) {
+    info->summary = "delete User";
+    info->addConsumes<Object<UserDto>>("application/json");
+    info->addResponse<Object<UserDto>>(Status::CODE_200, "application/json");
+  }
+  ENDPOINT("GET", "users/{uID}",delUser, PATH(Int32, uID))
+  {
+    int index = uID;
+
+    return createResponse(Status::CODE_200, "Deleted");
+  }
+
 };
 
 #include OATPP_CODEGEN_END(ApiController) //<-- End Codegen

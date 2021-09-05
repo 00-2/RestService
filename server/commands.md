@@ -2,3 +2,4 @@
  curl -X GET "http://localhost:8000/users/1"
  curl -X DELETE "http://localhost:8000/users/1"
  curl -X GET "http://localhost:8000/users/inc/1"
+ curl -X GET "http://localhost:8000/users/inc/personal/1"

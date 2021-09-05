@@ -73,10 +73,14 @@ public:
   }
   ENDPOINT("GET", "users/{uID}",getUser, PATH(Int32, uID))
   {
-    
-    auto showLoginDto = ShowLoginDto::createShared();
-    showLoginDto->login = users.getUserDto(int(uID))->login;
-    return createDtoResponse(Status::CODE_200, showLoginDto);
+    if (users.getIndex(uID)!=-1){
+      auto showLoginDto = ShowLoginDto::createShared();
+      showLoginDto->login = users.getUserDto(int(uID))->login;
+      return createDtoResponse(Status::CODE_200, showLoginDto);
+    }
+    else{
+      return createResponse(Status::CODE_204, "Not found with that ID");
+    }
   }
 
   /*Delete 

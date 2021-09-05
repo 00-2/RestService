@@ -1,8 +1,7 @@
 #ifndef MyController_hpp
 #define MyController_hpp
 
-    #include <iostream>
-
+#include <boost/format.hpp>
 
 #include "db/UserArray.hpp"
 #include "dto/UserDto.hpp"
@@ -74,9 +73,9 @@ public:
   }
   ENDPOINT("GET", "users/{uID}",getUser, PATH(Int32, uID))
   {
-    int index = uID;
+    
     auto showLoginDto = ShowLoginDto::createShared();
-    showLoginDto->login = users.getUserDto(index)->login;
+    showLoginDto->login = users.getUserDto(int(uID))->login;
     return createDtoResponse(Status::CODE_200, showLoginDto);
   }
 
@@ -91,9 +90,14 @@ public:
   }
   ENDPOINT("DELETE", "users/{uID}",delUser, PATH(Int32, uID))
   {
-    int index = uID;
-    users.remove(uID);
-    return createResponse(Status::CODE_200, "Deleted");
+    switch(users.remove(uID)){
+    case 200:
+      return createResponse(Status::CODE_200, "Deleted ");
+    case 204:
+      return createResponse(Status::CODE_200, "Not found with that ID ");
+    default:
+      return createResponse(Status::CODE_500, "Some error"); 
+    }
   }
 
 };

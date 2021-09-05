@@ -10,20 +10,23 @@ class UserArray{
         UserArray(){
         }
         void add(oatpp::web::server::api::ApiController::Object<UserDto>user){
-            if (data[uID]){
-                uID = data.size()-1;
-                data.push_back(user);
+            data.push_back(user);
+        }
+        int remove(int uID){//return status code
+            int index = -1;
+            for(int i = 0; i<data.size(); ++i){
+                if (uID==data[i]->id){
+                    index = i;
+                    break;
+                }
+            }
+            if (index!=-1){
+                data.erase(data.begin()+index);
+                return 200;
             }
             else{
-                int index = uID-1;
-                data.insert(data.begin()+index, user);
-                uID++;
+                return 204;
             }
-        }
-        void remove(int uID){
-            int index = uID-1;
-            data.erase(data.begin()+index);
-            this->uID = uID;
         }
 
         oatpp::web::server::api::ApiController::Object<UserDto> getUserDto(int index){
@@ -36,7 +39,7 @@ class UserArray{
         int size(){
             return data.size();
         }
-        int getUID(){
-            return uID;
+        int updateUID(){
+            return uID++;
         }
 };

@@ -37,12 +37,13 @@ class UserArray{
 
         oatpp::web::server::api::ApiController::Object<UserDto> getUserDto(int uID){
             int index = getIndex(uID);
-            if (index!=-1){
-                return data[index];
-            }
-            else{
-                return ;
-            }
+            return data[index];
+        }
+
+        int incPersonalCounter(int uID){
+            int index = getIndex(uID);
+            data[index]->counter = data[index]->counter+1 ;
+            return data[index]->counter;
         }
 
         void setUID(int tUID){

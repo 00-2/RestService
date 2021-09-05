@@ -79,7 +79,7 @@ public:
       return createDtoResponse(Status::CODE_200, showLoginDto);
     }
     else{
-      return createResponse(Status::CODE_204, "Not found with that ID");
+      return createResponse(Status::CODE_204, "Not found with that ID\n");
     }
   }
 
@@ -87,7 +87,7 @@ public:
       DELETE
       http://localhost:8000/users/{UID}
   */
-    ENDPOINT_INFO(delUser) {
+  ENDPOINT_INFO(delUser) {
     info->summary = "delete User";
     info->addConsumes<Object<UserDto>>("application/json");
     info->addResponse<Object<UserDto>>(Status::CODE_200, "application/json");
@@ -96,14 +96,36 @@ public:
   {
     switch(users.remove(uID)){
     case 200:
-      return createResponse(Status::CODE_200, "Deleted ");
+      return createResponse(Status::CODE_200, "Deleted\n");
     case 204:
-      return createResponse(Status::CODE_200, "Not found with that ID ");
+      return createResponse(Status::CODE_200, "Not found with that ID\n");
     default:
-      return createResponse(Status::CODE_500, "Some error"); 
+      return createResponse(Status::CODE_500, "Some error\n"); 
     }
   }
 
+   /*Increment 
+      POST
+      http://localhost:8000/users/{UID}
+  */
+  ENDPOINT_INFO(incrementPersonalCount) {
+    info->summary = "incrementPersonalCount";
+    info->addConsumes<Object<UserDto>>("application/json");
+    info->addResponse<Object<UserDto>>(Status::CODE_200, "application/json");
+  }
+  ENDPOINT("GET", "users/inc/{uID}",incrementPersonalCount, PATH(Int32, uID))
+  {
+    if (users.getIndex(uID)!=-1){
+      int personalCounter = users.incPersonalCounter(int(uID));
+      return createResponse(Status::CODE_200, std::to_string(personalCounter).c_str());
+    }
+    else{
+      return createResponse(Status::CODE_204, "Not found with that ID\n");
+    }
+  }
+
+
+  
 };
 
 #include OATPP_CODEGEN_END(ApiController) //<-- End Codegen

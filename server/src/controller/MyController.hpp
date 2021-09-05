@@ -1,11 +1,11 @@
 #ifndef MyController_hpp
 #define MyController_hpp
 
-#include <boost/format.hpp>
 
 #include "db/UserArray.hpp"
 #include "dto/UserDto.hpp"
 #include "dto/ShowLoginDto.hpp"
+#include "dto/ShowDataDto.hpp"
 
 
 #include "oatpp/web/server/api/ApiController.hpp"
@@ -42,11 +42,8 @@ public:
   /*Create user(
     POST
     http://localhost:8000/users
-
     RETURN UID
   ) - создать пользователя*/
-  
-   
   ENDPOINT_INFO(createUser) {
     info->summary = "Create new User";
     info->addConsumes<Object<UserDto>>("application/json");
@@ -83,7 +80,7 @@ public:
     }
   }
 
-  /*Delete 
+  /*Delete user 
       DELETE
       http://localhost:8000/users/{UID}
   */
@@ -104,27 +101,41 @@ public:
     }
   }
 
-   /*Increment 
+   /*local Increment 
       POST
       http://localhost:8000/users/{UID}
   */
-  ENDPOINT_INFO(incrementPersonalCount) {
+  ENDPOINT_INFO(incPersonalCount) {
     info->summary = "incrementPersonalCount";
     info->addConsumes<Object<UserDto>>("application/json");
     info->addResponse<Object<UserDto>>(Status::CODE_200, "application/json");
   }
-  ENDPOINT("GET", "users/inc/{uID}",incrementPersonalCount, PATH(Int32, uID))
+  ENDPOINT("GET", "users/inc/personal/{uID}",incPersonalCount, PATH(Int32, uID))
   {
     if (users.getIndex(uID)!=-1){
-      int personalCounter = users.incPersonalCounter(int(uID));
-      return createResponse(Status::CODE_200, std::to_string(personalCounter).c_str());
+      auto personalCounter = users.incPersonalCounter(int(uID));
+      auto showDataDto = ShowDataDto::createShared();
+      showDataDto->description = "local counter";
+      showDataDto->data = personalCounter;
+      return createDtoResponse(Status::CODE_200,showDataDto);
     }
     else{
       return createResponse(Status::CODE_204, "Not found with that ID\n");
     }
   }
 
-
+  ENDPOINT_INFO(incGlobalCount) {
+    info->summary = "incrementGlobalCount";
+    info->addConsumes<Object<UserDto>>("application/json");
+    info->addResponse<Object<UserDto>>(Status::CODE_200, "application/json");
+  }
+  ENDPOINT("GET", "users/inc/{uID}",incGlobalCount, PATH(Int32, uID))
+  {
+    auto showDataDto = ShowDataDto::createShared();
+    showDataDto->description = "global counter";
+    showDataDto->data = ++counter;
+    return createDtoResponse(Status::CODE_200,showDataDto);
+  }
   
 };
 

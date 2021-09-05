@@ -9,8 +9,8 @@
 
 class ShowDataDto : public oatpp::DTO {
   DTO_INIT(ShowDataDto, DTO)
-  DTO_FIELD(String, description, "counter");
-  DTO_FIELD(Int32, data, 0);
+  DTO_FIELD(String, description);
+  DTO_FIELD(Int32, data);
 };
 
 #include OATPP_CODEGEN_END(DTO)

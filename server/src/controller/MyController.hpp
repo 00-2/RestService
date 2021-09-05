@@ -6,6 +6,8 @@
 
 #include "db/UserArray.hpp"
 #include "dto/UserDto.hpp"
+#include "dto/ShowLoginDto.hpp"
+
 
 #include "oatpp/web/server/api/ApiController.hpp"
 #include "oatpp/core/macro/codegen.hpp"
@@ -73,10 +75,9 @@ public:
   ENDPOINT("GET", "users/{uID}",getUser, PATH(Int32, uID))
   {
     int index = uID;
-    //auto userDto = UserDto::createShared();
-    auto userDto = users.getUserDto(index-1);
-    userDto->password = "";
-    return createDtoResponse(Status::CODE_200, userDto);
+    auto showLoginDto = ShowLoginDto::createShared();
+    showLoginDto->login = users.getUserDto(index-1)->login;
+    return createDtoResponse(Status::CODE_200, showLoginDto);
   }
 };
 

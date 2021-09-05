@@ -12,7 +12,7 @@ class UserDto : public oatpp::DTO {
   DTO_INIT(UserDto, DTO)
   DTO_FIELD(Int32, id);
   DTO_FIELD(Int32, counter);
-  DTO_FIELD(String, username, "username");
+  DTO_FIELD(String, login, "login");
   DTO_FIELD(String, password, "password");
 };
 

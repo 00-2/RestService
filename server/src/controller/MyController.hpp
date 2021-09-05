@@ -19,6 +19,7 @@
 class MyController : public oatpp::web::server::api::ApiController {
 private:
   UserArray users;
+  std::atomic<int> counter{0};
 public:
   /**
    * Constructor with object mapper.
@@ -55,11 +56,12 @@ public:
   {
     this->users.add(userDto);
     userDto->id = this->users.getUID();
+    userDto->counter = 0;
     return createDtoResponse(Status::CODE_200, userDto);
   }
   
   
-  /*WHOAMI(
+  /*WHOAMI - returns login(
       GET
       http://localhost:8000/users/{UID}
   )*/
@@ -71,7 +73,9 @@ public:
   ENDPOINT("GET", "users/{uID}",getUser, PATH(Int32, uID))
   {
     int index = uID;
+    //auto userDto = UserDto::createShared();
     auto userDto = users.getUserDto(index-1);
+    userDto->password = "";
     return createDtoResponse(Status::CODE_200, userDto);
   }
 };

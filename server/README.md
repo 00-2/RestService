@@ -39,13 +39,13 @@ $ ./my-project-exe  # - run application.
 #### Commands:
 ```
 `Create User:`
-$curl -X POST "http://localhost:8000/users" -H "accept: application/json" -H "Content-Type: application/json" -d "{"login":"string1","password":"string1"}" 
+$curl -X POST "http://localhost:8000/users" -H "accept: application/json" -H "Content-Type: application/json" -d '{"login":"string1","password":"string1"}'
 `Get login`
-$curl -X GET "http://localhost:8000/users/1"
+$curl -X GET "http://localhost:8000/users/0"
 `Delete user`
-$curl -X DELETE "http://localhost:8000/users/1"
+$curl -X DELETE "http://localhost:8000/users/0"
 `Increment global count`
-$curl -X GET "http://localhost:8000/users/inc/1"
+$curl -X GET "http://localhost:8000/users/inc/0"
 `Increment local count`
-$curl -X GET "http://localhost:8000/users/inc/personal/1"
+$curl -X GET "http://localhost:8000/users/inc/personal/0"
 ```

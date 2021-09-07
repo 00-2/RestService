@@ -55,6 +55,7 @@ public:
     userDto->id = this->users.updateUID();
     userDto->counter = 0;
     this->users.add(userDto);
+    OATPP_LOGI("Create user", "\n\tlogin:%s\n\tuID:%d", userDto->login->c_str(), int(userDto->id));
     return createDtoResponse(Status::CODE_200, userDto);
   }
   
@@ -93,8 +94,10 @@ public:
   {
     switch(users.remove(uID)){
     case 200:
+      OATPP_LOGI("Delete user", "\n\tuID:%d", int(uID));
       return createResponse(Status::CODE_200, "Deleted\n");
     case 204:
+      //OATPP_LOGI("Delete user", "\n\tTRY TO DELETE, NOT FOUND uID:%d", int(uID));
       return createResponse(Status::CODE_200, "Not found with that ID\n");
     default:
       return createResponse(Status::CODE_500, "Some error\n"); 
@@ -115,8 +118,9 @@ public:
     if (users.getIndex(uID)!=-1){
       auto personalCounter = users.incPersonalCounter(int(uID));
       auto showDataDto = ShowDataDto::createShared();
-      showDataDto->description = "local counter";
+      showDataDto->description = ("uID:"+std::to_string(uID)).c_str();
       showDataDto->data = personalCounter;
+      OATPP_LOGI("Inc user", "\n\tuID:%d\n\tcounter:%d", int(uID),personalCounter);
       return createDtoResponse(Status::CODE_200,showDataDto);
     }
     else{
@@ -132,8 +136,9 @@ public:
   ENDPOINT("GET", "users/inc/{uID}",incGlobalCount, PATH(Int32, uID))
   {
     auto showDataDto = ShowDataDto::createShared();
-    showDataDto->description = "global counter";
+    showDataDto->description = "global";
     showDataDto->data = ++counter;
+    OATPP_LOGI("Inc global", "\n\tcounter:%d", counter);
     return createDtoResponse(Status::CODE_200,showDataDto);
   }
   

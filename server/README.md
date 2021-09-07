@@ -3,7 +3,7 @@ Test task, based on oatpp-starter.
 
 ### Project layout
 
-
+```
 |- CMakeLists.txt                        // projects CMakeLists.txt
 |- src/
 |    |

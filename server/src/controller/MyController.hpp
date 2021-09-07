@@ -138,7 +138,7 @@ public:
     auto showDataDto = ShowDataDto::createShared();
     showDataDto->description = "global";
     showDataDto->data = ++counter;
-    OATPP_LOGI("Inc global", "\n\tcounter:%d", counter);
+    OATPP_LOGI("Inc global","\n\tuID:%d\n\tcounter:%d", int(uID), int(counter));
     return createDtoResponse(Status::CODE_200,showDataDto);
   }
   
